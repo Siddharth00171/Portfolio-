@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Siddharth — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#060814; --bg2:#0b1220;
+    --muted:#b8c2cf;
+    --accent:#00ffd5; --accent2:#a64bff;
+    --card-grad: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter, Poppins, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:#eaf3ff;-webkit-font-smoothing:antialiased;}
+  a{color:var(--accent);text-decoration:none}
+  .container{max-width:1200px;margin:0 auto;padding:0 20px}
+
+  /* OVERLAY (LOCK) */
+  #overlay {
+    position:fixed;inset:0;z-index:4000;display:grid;place-items:center;
+    background:linear-gradient(180deg,#000,#05050a);
+  }
+  .unlock {
+    width:min(940px,94%);padding:28px;border-radius:12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.03);text-align:center;backdrop-filter: blur(6px);
+    box-shadow:0 30px 90px rgba(0,0,0,0.8);
+  }
+  .unlock h4{margin:0;color:var(--muted);font-weight:600}
+  .unlock .title{font-size:28px;font-weight:800;margin:12px 0;background:linear-gradient(90deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .typebox{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;display:inline-block;background:rgba(0,0,0,0.25);padding:12px 14px;border-radius:10px;color:var(--muted);min-width:320px}
+  .caret{display:inline-block;margin-left:8px;width:12px;height:20px;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;animation:blink .9s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .progress{height:8px;background:rgba(255,255,255,0.03);border-radius:999px;margin-top:18px;overflow:hidden}
+  .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width .8s cubic-bezier(.2,.9,.2,1)}
+  .unlock .hint{margin-top:10px;color:#9aa5bb;font-size:13px}
+  #unlock-btn { margin-top:14px; padding:12px 18px; border-radius:10px; background:linear-gradient(90deg,var(--accent),#76fff0); color:#021018; border:none; font-weight:800; cursor:pointer; box-shadow:0 18px 40px rgba(0,255,213,0.06); }
+
+  /* TOPBAR */
+  header.topbar{position:fixed;inset:0 0 auto 0;height:68px;display:flex;align-items:center;z-index:1500;background:linear-gradient(180deg, rgba(2,6,23,0.45), rgba(2,6,23,0.18));border-bottom:1px solid rgba(255,255,255,0.02);backdrop-filter: blur(8px)}
+  .topbar .container{display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;font-weight:800;color:#071017;background:linear-gradient(135deg,var(--accent2),var(--accent));box-shadow:0 12px 40px rgba(166,75,255,0.12)}
+  .topnav{display:flex;gap:16px;align-items:center}
+  .topnav a{color:var(--muted);font-weight:600;padding:8px 10px;border-radius:8px;transition:all .18s ease}
+  .topnav a:hover{color:#fff;transform:translateY(-3px)}
+  .hire{padding:8px 12px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#76fff0);color:#021018;font-weight:700;border:none;cursor:pointer}
+
+  /* HERO */
+  section.hero{min-height:100vh;display:grid;place-items:center;padding:120px 20px 60px;position:relative;overflow:hidden}
+  canvas#particles{position:absolute;inset:0;z-index:1}
+  .blob{position:absolute;border-radius:50%;filter:blur(56px);opacity:0.12;mix-blend-mode:screen;animation:blobShift 14s infinite alternate;z-index:2}
+  .b1{width:540px;height:540px;left:-160px;top:4%;background:linear-gradient(135deg,#00ffd5,#00a3ff)}
+  .b2{width:420px;height:420px;right:-160px;bottom:4%;background:linear-gradient(135deg,#a64bff,#ff6ba7);opacity:0.12}
+  @keyframes blobShift{to{transform:translateY(-30px) translateX(18px) scale(1.045)}}
+  .hero-card{position:relative;z-index:5;max-width:980px;padding:36px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
+  .hero-name{font-size:clamp(30px,6vw,62px);font-weight:800;margin:0;color:transparent;background:linear-gradient(90deg,var(--accent2),var(--accent));-webkit-background-clip:text}
+  .hero-sub{color:var(--muted);margin-top:12px;font-weight:600;text-align:center}
+  .pills{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+  .pill{padding:8px 14px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);color:var(--muted);font-weight:700}
+  .hero-actions{display:flex;gap:12px;justify-content:center;margin-top:20px}
+  .btn{padding:12px 18px;border-radius:12px;background:linear-gradient(90deg, rgba(0,255,213,0.08), rgba(166,75,255,0.04));border:1px solid rgba(255,255,255,0.04);color:var(--accent);font-weight:800;cursor:pointer;transition:transform .18s ease, box-shadow .18s ease}
+  .btn.secondary{background:transparent;color:var(--muted)}
+  .btn:hover{transform:translateY(-6px);box-shadow:0 18px 60px rgba(0,255,213,0.06)}
+  .meta{display:flex;gap:18px;justify-content:center;color:var(--muted);margin-top:14px;font-size:14px}
+
+  /* MAIN (sections) */
+  main{padding-top:40px}
+  section.block{padding:72px 0}
+  .section-head{display:flex;align-items:center;gap:12px}
+  .section-head h2{font-size:18px;color:var(--accent);margin:0}
+  .section-sub{color:var(--muted);margin:10px 0 18px}
+
+  /* Projects */
+  .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+  .proj{background:var(--card-grad);padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden;transition:transform .36s cubic-bezier(.2,.9,.2,1),box-shadow .36s}
+  .proj:hover{transform:translateY(-12px);box-shadow:0 30px 70px rgba(0,0,0,0.6)}
+  .thumb{height:160px;border-radius:10px;overflow:hidden;background:#06060a}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .proj h3{margin:10px 0 6px;font-size:18px}
+  .proj p{color:var(--muted);font-size:14px;line-height:1.5}
+  .tagrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .tag{font-size:12px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.02);color:var(--muted)}
+
+  /* Featured carousel */
+  .carousel-scroll{display:flex;gap:18px;overflow-x:auto;padding:12px 6px;scroll-snap-type:x mandatory}
+  .carousel-scroll .card{min-width:420px;flex:0 0 420px;border-radius:12px;padding:18px;background:var(--card-grad);border:1px solid rgba(255,255,255,0.03);scroll-snap-align:center}
+  .carousel-scroll::-webkit-scrollbar{height:8px}
+  .carousel-scroll::-webkit-scrollbar-thumb{background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:10px}
+
+  /* About/Two column */
+  .two-col{display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:start}
+  .card-panel{background:rgba(255,255,255,0.02);padding:20px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+  .avatar{width:120px;height:120px;border-radius:12px;background:linear-gradient(135deg,var(--accent2),var(--accent));display:grid;place-items:center;font-weight:800;color:#071017;font-size:28px;margin:auto}
+  .bio p{color:var(--muted);line-height:1.7}
+
+  /* Skills */
+  .skillbar .skill{display:flex;justify-content:space-between;font-weight:700;color:var(--muted);margin-bottom:6px}
+  .bar{height:10px;background:rgba(255,255,255,0.03);border-radius:999px;overflow:hidden}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0%;transition:width 1.4s cubic-bezier(.2,.9,.2,1)}
+
+  /* Contact */
+  .contact-card{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+  .mail{display:flex;gap:10px;align-items:center;background:linear-gradient(90deg, rgba(0,255,213,0.06), rgba(166,75,255,0.03));padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);font-weight:700;color:#021018}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(28px);transition:all .75s cubic-bezier(.2,.9,.2,1)}
+  .reveal.show{opacity:1;transform:translateY(0)}
+  .fade{opacity:0;transition:opacity .9s ease}
+  .fade.show{opacity:1}
+
+  /* center content on phone */
+  @media (max-width:900px){
+    .hero-card, .card-panel, .proj, .carousel-scroll .card { margin-left:auto; margin-right:auto; }
+    main{padding-left:16px; padding-right:16px;}
+  }
+  @media (max-width:760px){
+    .two-col{grid-template-columns:1fr;}
+    .topnav{display:none}
+    .hero-sub{text-align:center}
+    .pills{justify-content:center}
+    .proj{text-align:center}
+    .thumb{height:140px}
+  }
+</style>
+</head>
+<body>
+
+<!-- OVERLAY: user MUST tap to unlock -->
+<div id="overlay" aria-hidden="false">
+  <div class="unlock" role="dialog" aria-modal="true" aria-label="Portfolio unlocking">
+    <h4>Initializing Portfolio</h4>
+    <div class="title">Welcome — Siddharth</div>
+    <div style="height:8px"></div>
+
+    <div class="typebox" id="typebox" aria-live="polite"><span id="typed"></span><span class="caret" id="caret"></span></div>
+
+    <div class="progress" aria-hidden="true"><i id="progBar"></i></div>
+
+    <!-- mobile/desktop unlock button (user MUST press) -->
+    <div style="display:flex;gap:10px;justify-content:center;align-items:center;margin-top:12px">
+      <button id="unlock-btn">Tap to Unlock</button>
+    </div>
+
+    <div class="unlock hint" style="margin-top:10px;color:#9aa5bb">Tap the button above to reveal the site.</div>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<header class="topbar" role="banner" aria-hidden="true">
+  <div class="container">
+    <div class="brand" aria-hidden="true">
+      <div class="logo">SS</div>
+      <div>
+        <div style="font-weight:800">Siddharth</div>
+        <div style="color:var(--muted);font-size:12px;margin-top:2px">Graphics • Web • Discord Manager</div>
+      </div>
+    </div>
+
+    <nav class="topnav" role="navigation" aria-label="Main navigation">
+      <a href="#projects">Projects</a>
+      <a href="#featured">Featured</a>
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a class="hire" href="mailto:sidislost8@gmail.com">Email</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home" aria-label="Home">
+  <canvas id="particles" width="1600" height="900" aria-hidden="true"></canvas>
+  <div class="blob b1" aria-hidden="true"></div>
+  <div class="blob b2" aria-hidden="true"></div>
+
+  <div class="hero-card container" role="region" aria-label="Intro">
+    <div style="text-align:center">
+      <div class="hero-name">Siddharth</div>
+      <div class="hero-sub">Graphics Designer • Web Designer • Discord Manager</div>
+
+      <div class="pills" aria-hidden>
+        <div class="pill">1st Year BCA, ADAMAS University</div>
+        <div class="pill">Discord: <strong style="color:#fff">stfukai_</strong></div>
+        <div class="pill">Email: <strong style="color:#fff">sidislost8@gmail.com</strong></div>
+      </div>
+
+      <div class="hero-actions" style="margin-top:18px">
+        <button class="btn" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">View Projects</button>
+        <button class="btn secondary" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">About Me</button>
+      </div>
+
+      <div class="meta" aria-hidden>
+        <div>📍 West Bengal</div><div>•</div><div>Available for freelance & collaborations</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="container" role="main">
+
+  <!-- PROJECTS -->
+  <section id="projects" class="block" aria-labelledby="projects-heading">
+    <div class="section-head"><h2 id="projects-heading">Projects</h2></div>
+    <div class="section-sub">Selected highlights — community ops, UI experiments, and product work.</div>
+
+    <div class="projects-grid">
+      <article class="proj reveal">
+        <div class="thumb">
+          <img loading="lazy" src="nxt.png" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=60'" alt="NXT Discord project">
+        </div>
+        <h3>NXT Dating Server</h3>
+        <p>Built onboarding, verification, and event systems; managed a high-engagement dating community.</p>
+        <div class="tagrow"><span class="tag">Discord</span><span class="tag">Events</span><span class="tag">Safety</span></div>
+      </article>
+
+      <article class="proj reveal">
+        <div class="thumb">
+          <img loading="lazy" src="live-insaan.png" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1200&q=60'" alt="Live Insaan project">
+        </div>
+        <h3>Live Insaan — Creator Collab</h3>
+        <p>Community engagement, AMAs, branding and promotion for live-creator communities.</p>
+        <div class="tagrow"><span class="tag">Branding</span><span class="tag">Creator</span></div>
+      </article>
+
+      <article class="proj reveal">
+        <div class="thumb">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1508921912186-1d1a45ebb3c1?auto=format&fit=crop&w=1200&q=60" alt="UI animation kit">
+        </div>
+        <h3>Portfolio Animation Kit</h3>
+        <p>Lightweight, accessible animations and micro-interactions designed for portfolios.</p>
+        <div class="tagrow"><span class="tag">UI</span><span class="tag">Animation</span></div>
+      </article>
+
+      <article class="proj reveal">
+        <div class="thumb">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=60" alt="ecommerce prototype">
+        </div>
+        <h3>Mini E-commerce UI</h3>
+        <p>Mobile-first product listing & checkout UI focused on clarity and conversion.</p>
+        <div class="tagrow"><span class="tag">E-commerce</span><span class="tag">UX</span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- FEATURED -->
+  <section id="featured" class="block">
+    <div class="section-head"><h2>Featured Case Studies</h2></div>
+    <div class="section-sub">Drag or scroll horizontally to explore deeper case studies.</div>
+
+    <div class="carousel-scroll" id="carousel" role="region">
+      <div class="card reveal">
+        <div class="bigthumb" style="height:200px;border-radius:10px;overflow:hidden;margin-bottom:12px"><img loading="lazy" src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1400&q=60" style="width:100%;height:100%;object-fit:cover" alt=""></div>
+        <h3>NXT Dating — Growth & Safety</h3>
+        <p style="color:var(--muted)">Designed onboarding flows, moderation automation, and event systems to increase safety and engagement.</p>
+        <div style="margin-top:10px;display:flex;gap:8px"><span class="tag">Strategy</span><span class="tag">Automation</span></div>
+      </div>
+
+      <div class="card reveal">
+        <div class="bigthumb" style="height:200px;border-radius:10px;overflow:hidden;margin-bottom:12px"><img loading="lazy" src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1400&q=60" style="width:100%;height:100%;object-fit:cover" alt=""></div>
+        <h3>Portfolio Animation Kit</h3>
+        <p style="color:var(--muted)">A set of performance-minded UI micro-interactions ready for portfolios.</p>
+        <div style="margin-top:10px;display:flex;gap:8px"><span class="tag">Frontend</span><span class="tag">Performance</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="block">
+    <div class="section-head"><h2>About</h2></div>
+    <div class="two-col">
+      <div class="card-panel reveal">
+        <h3>Hello — I'm Siddharth</h3>
+        <p class="bio">I'm a creative technologist and community manager. I build polished user experiences — from visual branding and web UIs to operational tooling and community scripts that keep servers healthy and engaged. I study BCA (1st year) at ADAMAS University and work on projects ranging from creator collabs to large-scale Discord moderation systems.</p>
+
+        <div style="margin-top:18px" class="timeline">
+          <div style="display:flex;gap:10px;align-items:flex-start"><div style="width:12px;height:12px;border-radius:50%;background:linear-gradient(90deg,var(--accent2),var(--accent));margin-top:6px"></div><div><strong style="color:#fff">2023 — Present</strong> — Community Ops & Designer</div></div>
+          <div style="display:flex;gap:10px;align-items:flex-start;margin-top:10px"><div style="width:12px;height:12px;border-radius:50%;background:linear-gradient(90deg,var(--accent2),var(--accent));margin-top:6px"></div><div><strong style="color:#fff">2021 — 2023</strong> — Freelance Web & Graphics</div></div>
+        </div>
+      </div>
+
+      <aside class="card-panel reveal" style="display:flex;flex-direction:column;gap:14px;align-items:center">
+        <div class="avatar">SS</div>
+        <div style="text-align:center"><div style="font-weight:800">Siddharth</div><div style="color:var(--muted);font-size:13px;margin-top:6px">1st Year BCA — ADAMAS University</div></div>
+        <div style="width:100%;margin-top:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center"><small style="color:var(--muted)">Location</small><small style="color:var(--muted)">West Bengal</small></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><small style="color:var(--muted)">Discord</small><small style="color:var(--muted)">stfukai_</small></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><small style="color:var(--muted)">Email</small><small style="color:var(--muted)"><a href="mailto:sidislost8@gmail.com">sidislost8@gmail.com</a></small></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="block">
+    <div class="section-head"><h2>Skills</h2></div>
+    <div class="section-sub">Tools, design, and community skills I use daily.</div>
+
+    <div style="display:grid;grid-template-columns:1fr 320px;gap:28px;align-items:start">
+      <div class="card-panel reveal">
+        <div class="skillbar">
+          <div class="skill"><span>Branding & Visual Design</span><span>94%</span></div>
+          <div class="bar"><i data-width="94%"></i></div>
+
+          <div class="skill" style="margin-top:12px"><span>Discord Ops & Bots</span><span>90%</span></div>
+          <div class="bar"><i data-width="90%"></i></div>
+
+          <div class="skill" style="margin-top:12px"><span>HTML / CSS / JS</span><span>88%</span></div>
+          <div class="bar"><i data-width="88%"></i></div>
+
+          <div class="skill" style="margin-top:12px"><span>React / UI Components</span><span>78%</span></div>
+          <div class="bar"><i data-width="78%"></i></div>
+
+          <div class="skill" style="margin-top:12px"><span>Performance & Accessibility</span><span>82%</span></div>
+          <div class="bar"><i data-width="82%"></i></div>
+        </div>
+      </div>
+
+      <div class="card-panel reveal">
+        <h4 style="margin-bottom:12px">Tools & Tech</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <div class="tag">Figma</div><div class="tag">Photoshop</div><div class="tag">Illustrator</div><div class="tag">HTML</div>
+          <div class="tag">CSS</div><div class="tag">JavaScript</div><div class="tag">React</div><div class="tag">Discord.js</div><div class="tag">Vercel</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASE STUDY -->
+  <section class="block">
+    <div class="section-head"><h2>Case Study — Server Ops</h2></div>
+    <div class="section-sub">A short walkthrough of the approach used for a high-traffic community.</div>
+
+    <div class="card-panel reveal">
+      <h3>Challenge</h3>
+      <p style="color:var(--muted)">Spam and onboarding friction made retention hard. Moderation was manual and slow.</p>
+      <h3 style="margin-top:12px">Approach</h3>
+      <ul style="color:var(--muted);line-height:1.8">
+        <li>Automated onboarding + verification to reduce bots.</li>
+        <li>Built admin dashboards and small moderation scripts.</li>
+        <li>Designed weekly events and micro-campaigns to boost DAU.</li>
+        <li>Created branded assets and collabs to increase organic invites.</li>
+      </ul>
+      <h3 style="margin-top:12px">Impact</h3>
+      <p style="color:var(--muted)">Spam reduced ~82%, DAU +38% quarter-on-quarter, and event participation rose significantly.</p>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="block">
+    <div class="section-head"><h2>Contact</h2></div>
+    <div class="section-sub">For collabs, freelance work, or questions — reach out via email or Discord.</div>
+
+    <div class="card-panel contact-card reveal">
+      <div class="mail"><svg width="18" height="14" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 3.5C2 2.67157 2.67157 2 3.5 2H20.5C21.3284 2 22 2.67157 22 3.5V12.5C22 13.3284 21.3284 14 20.5 14H3.5C2.67157 14 2 13.3284 2 12.5V3.5Z" stroke="#021018" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 4L12 9L21 4" stroke="#021018" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>&nbsp;<span style="font-weight:700;color:#021018">sidislost8@gmail.com</span></div>
+
+      <div style="color:var(--muted)">Discord: <strong style="color:#fff">stfukai_</strong> — 1st Year BCA at <strong>ADAMAS University</strong></div>
+
+      <div style="display:flex;gap:10px;margin-top:6px">
+        <a class="btn" href="mailto:sidislost8@gmail.com">Email Me</a>
+        <a class="btn secondary" href="#projects" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">See Projects</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer style="padding:28px 20px 60px;text-align:center;color:var(--muted);border-top:1px solid rgba(255,255,255,0.02);margin-top:40px">
+  <div class="container">
+    <div style="margin-bottom:8px">© <span id="yr"></span> Siddharth — Built with care</div>
+    <div style="font-size:13px;color:var(--muted)">Portfolio • Graphics • Web • Community Ops • Images: Unsplash</div>
+  </div>
+</footer>
+
+<script>
+/* --------- Typewriter unlock (user must tap) --------- */
+(function(){
+  const overlay = document.getElementById('overlay');
+  const typedEl = document.getElementById('typed');
+  const prog = document.getElementById('progBar');
+  const unlockBtn = document.getElementById('unlock-btn');
+
+  const MESSAGES = [
+    'Checking assets...',
+    'Loading design tokens...',
+    'Starting animations...',
+    'Connecting community modules...',
+    'Finalizing — welcome!'
+  ];
+
+  const TOTAL = 6500;
+  const PAUSE_SUM = 600;
+  const TYPE_TIME = TOTAL - PAUSE_SUM;
+  const totalChars = MESSAGES.join('').length;
+  const charDelay = Math.max(10, Math.floor(TYPE_TIME / totalChars));
+
+  let running = false;
+
+  function typeMessage(msg){
+    return new Promise(resolve=>{
+      typedEl.textContent = '';
+      let i = 0;
+      const t = setInterval(()=>{
+        typedEl.textContent += msg[i++];
+        if(i >= msg.length){
+          clearInterval(t);
+          setTimeout(resolve, 140);
+        }
+      }, charDelay);
+    });
+  }
+
+  async function runSequence(){
+    if(running) return;
+    running = true;
+    let idx = 0;
+    for(const m of MESSAGES){
+      await typeMessage(m);
+      idx++;
+      prog.style.width = Math.round((idx/MESSAGES.length)*100) + '%';
+    }
+    prog.style.width = '100%';
+    setTimeout(()=> {
+      overlay.style.opacity = '0';
+      overlay.style.transform = 'scale(.98)';
+      setTimeout(()=> overlay.remove(), 420);
+      postUnlock();
+    }, 300);
+  }
+
+  unlockBtn.addEventListener('click', runSequence);
+
+  function postUnlock(){
+    document.querySelectorAll('.reveal').forEach((el,i)=> setTimeout(()=> el.classList.add('show'), 110 * i));
+    setTimeout(()=> {
+      document.querySelectorAll('.bar > i').forEach(i=>{
+        i.style.width = i.getAttribute('data-width') || '80%';
+      });
+    }, 500);
+  }
+})();
+
+/* --------- particles canvas (lightweight) --------- */
+(function(){
+  const canvas = document.getElementById('particles');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w = canvas.width = innerWidth;
+  let h = canvas.height = innerHeight;
+  const count = Math.max(40, Math.round((w*h)/90000));
+  const parts = [];
+  function rand(min,max){ return Math.random()*(max-min)+min; }
+  function init(){ parts.length=0; for(let i=0;i<count;i++){ parts.push({x:rand(0,w), y:rand(0,h), vx:rand(-0.25,0.25), vy:rand(-0.25,0.25), r:rand(0.6,2.4), a:rand(0.02,0.12)})}}
+  function resize(){ w=canvas.width=innerWidth; h=canvas.height=innerHeight; init(); }
+  window.addEventListener('resize', resize);
+  init();
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    for(const p of parts){
+      p.x += p.vx; p.y += p.vy;
+      if(p.x<-20) p.x = w+20; if(p.x>w+20) p.x = -20;
+      if(p.y<-20) p.y = h+20; if(p.y>h+20) p.y = -20;
+      const g = ctx.createRadialGradient(p.x,p.y,p.r*0.2,p.x,p.y,p.r*6);
+      g.addColorStop(0, `rgba(0,255,213,${p.a})`);
+      g.addColorStop(1, `rgba(166,75,255,0)`);
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* --------- reveal observer --------- */
+(function(){
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting) en.target.classList.add('show');
+    });
+  }, {threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})();
+
+/* --------- carousel drag support --------- */
+(function(){
+  const scroller = document.getElementById('carousel');
+  if(!scroller) return;
+  let isDown=false,startX,scrollLeft;
+  scroller.addEventListener('mousedown', e=>{ isDown=true; startX=e.pageX-scroller.offsetLeft; scrollLeft=scroller.scrollLeft; scroller.classList.add('active');});
+  scroller.addEventListener('mouseup', ()=>{ isDown=false; scroller.classList.remove('active');});
+  scroller.addEventListener('mouseleave', ()=>{ isDown=false; scroller.classList.remove('active');});
+  scroller.addEventListener('mousemove', e=>{ if(!isDown) return; e.preventDefault(); const x=e.pageX-scroller.offsetLeft; const walk=(x-startX)*1.5; scroller.scrollLeft = scrollLeft - walk;});
+})();
+
+/* --------- small parallax for hero blobs --------- */
+(function(){
+  const b1 = document.querySelector('.b1'), b2 = document.querySelector('.b2');
+  if(!b1 || !b2) return;
+  document.addEventListener('mousemove', e=>{
+    const x = (e.clientX / innerWidth) - 0.5;
+    const y = (e.clientY / innerHeight) - 0.5;
+    b1.style.transform = `translate(${x*30}px, ${y*25}px)`;
+    b2.style.transform = `translate(${x*-25}px, ${y*-18}px)`;
+  });
+})();
+
+/* --------- footer year --------- */
+document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
